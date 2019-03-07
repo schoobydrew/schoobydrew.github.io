@@ -54,7 +54,7 @@ p {
     visibility: hidden;
     position: absolute;
     left: 0px;
-    top: 100px;
+    top: 200px;
 }
 .card:hover .cardText{
     visibility: visible;
