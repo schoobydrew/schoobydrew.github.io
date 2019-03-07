@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>NASA</title>
+<h1>NASA IMAGE ARCHIVE</h1>
+
+<form id="frm1">
+  Search: <input type="text"><br>
+  Center: <input type="text"><br>
+  Description: <input type="text"><br>
+  Location: <input type="text"><br>
+  Start Year: <input type="text"><br>
+  End Year: <input type="text"><br>
+</form>
+
+<button onclick="apiRequest()">Search</button>
+
+<p id="main"></p>
+
+<script>
+function debugFunc() {
+  var x = document.getElementById("frm1");
+  var text = "You entered: <br>";
+  var i;
+  for (i = 0; i < x.length ;i++)
+  {
+    if (x.elements[i].value == "") {text += "null <br>"}
+    else {text += x.elements[i].value + "<br>";}
+  }
+  text += buildURL();
+  document.getElementById("main").innerHTML = text;
+  document.getElementById("frm1").reset();
+}
+</script>
+<script>
+function apiRequest()
+{
+    document.getElementById("main").innerHTML = "";
+    var Http = new XMLHttpRequest();
+    //build url
+    var url = buildURL();
+    document.getElementById("frm1").reset();
+    //send get request
+    Http.open("GET", url, true);
+    Http.send();
+    //show results
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status >= 200 && this.status < 400)
+        {
+            var jsonText = JSON.parse(this.responseText);
+            for (var i = 0; i < jsonText["collection"]["items"].length; i++)
+            {
+                //add title
+                var name = document.createElement("h1");
+                var nameText = document.createTextNode(jsonText["collection"]["items"][i]["data"][0]["title"]);
+                name.appendChild(nameText);
+                document.getElementById("main").appendChild(name);
+                //add desc
+                var desc = document.createElement("P");
+                var descText = document.createTextNode(jsonText["collection"]["items"][i]["data"][0]["description"]);
+                desc.appendChild(descText);
+                document.getElementById("main").appendChild(desc);
+                //add image
+                var image = document.createElement("img");
+                image.setAttribute("src", jsonText["collection"]["items"][i]["links"][0]["href"]);
+                document.getElementById("main").appendChild(image);
+            }
+        }
+    };
+}
+function buildURL()
+{
+    var str = "https://images-api.nasa.gov/search?media_type=image"
+    var inputs = document.getElementById("frm1");
+    var criteria = ["q", "center", "description", "location", "year_start", "year_end"];
+    for (var i = 0; i < inputs.elements.length; i++)
+    {
+        if (inputs.elements[i].value != "")
+        {
+            var temp = "&" + criteria[i] + "=" + inputs.elements[i].value;
+            str += temp;
+        }
+    }
+    return str;
+}
+</script>
+
+</body>
+</html>
