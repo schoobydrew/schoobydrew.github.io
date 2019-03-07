@@ -57,7 +57,7 @@ function apiRequest()
             {
                 //add title
                 var name = document.createElement("h1");
-                var nameText = document.createTextNode(jsonText["collection"]["items"][i]["data"][0]["title"].substring(0,50));
+                var nameText = document.createTextNode(jsonText["collection"]["items"][i]["data"][0]["title"].substring(0,50)+"...");
                 name.appendChild(nameText);
                 //add desc
                 var desc = document.createElement("P");
