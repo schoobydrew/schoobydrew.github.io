@@ -3,9 +3,8 @@
 <body>
 <title>NASA</title>
 <h1>NASA IMAGE ARCHIVE</h1>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="style.css" rel="stylesheet">
-<div class="searchbar" align="left">
+<div class="searchbar" align="right">
 <form id="frm1">
   Normal Search: <input type="text"><br>
   Publishing Center: <input type="text"><br>
@@ -63,10 +62,12 @@ function apiRequest()
                 //add desc
                 var desc = document.createElement("P");
                 var descText = document.createTextNode(jsonText["collection"]["items"][i]["data"][0]["description"]);
+                desc.setAttribute("class", "cardText")
                 desc.appendChild(descText);
                 //add image
                 var image = document.createElement("img");
                 image.setAttribute("src", jsonText["collection"]["items"][i]["links"][0]["href"]);
+                image.setAttribute("class", "cardImage");
                 //append everything to card
                 var card = document.createElement("div");
                 card.setAttribute("class", "card");

@@ -50,6 +50,18 @@ p {
   overflow: hidden;
   transition: all .2s linear;
 }
+.card .cardText{
+    visibility: hidden;
+    position: absolute;
+    left: 0px;
+    top: 100px;
+}
+.card:hover .cardText{
+    visibility: visible;
+}
+.card:hover .cardImage{
+    visibility: hidden;
+}
 
 .card:hover {
   box-shadow: 2px 8px 45px rgba(0, 0, 0, .15);
