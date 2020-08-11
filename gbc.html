@@ -1,0 +1,148 @@
+<!--GBC Doc by Andrew and Michael-->
+<!DOCTYPE html>
+<html>
+<body>
+<title>GBC</title>
+<h1>Get Big Chart with the Gym Bro Calculator</h1>
+<div class="searchbar" align="left">
+<button onclick="gains()">Show me my gains!</button>
+</div>
+<p id="main"></p>
+
+<script>
+//put your exercises and max's here
+workout = {
+    "Chest, Shoulders, & Tri's":{
+        "Bench": {"type":"barbell", "max":225},
+        "Chest Pushup": {"type":"bodyweight"},
+        "Overhead Press": {"type":"barbell", "max":135},
+        "Lateral Raise": {"type":"dumbbell", "max":45},
+        "Skullcrusher": {"type":"dumbbell", "max":45},
+        "Tricep Pushdown": {"type":"machine", "max":10},
+        "Tricep Pushup": {"type":"bodyweight"},
+        "Dip": {"type":"bodyweight"}
+    },
+    "Legs & Core":{
+        "Squat": {"type":"barbell", "max":225},
+        "Dead lift": {"type":"barbell", "max":135},
+        "Calf Raise": {"type":"dumbbell", "max":45},
+        "Core": {"type":"bodyweight"}
+    },
+    "Back & Bi's":{
+        "Pull Up": {"type":"bodyweight"},
+        "Inverted Row": {"type":"bodyweight"},
+        "Cable Row": {"type":"machine", "max":45},
+        "DB Row": {"type":"dumbbell", "max":45},
+        "Curl": {"type":"dumbbell", "max":45}
+    }
+};
+//globals
+//use decimal for percentage
+weekly_percentages = [[.6,.6,.75,.75],[.65,.75,.85,.85],[.7,.8,.9,.9],[.5,.5,.6,.6]];
+weekly_rep_count = [5,4,3,10];
+bodyweight_rep_count = 10;
+available_weights = [45,25,10,5,2.5];
+weight_of_bar = 45;
+//scripts
+function gains()
+{
+    //clear main html body
+    document.getElementById("main").innerHTML = "";
+    //set our two variables which will be added together for innerhtml = links + body
+    links = "";
+    body = "";
+    //iterate
+    for (i in weekly_rep_count) {
+        //misc design stuff
+        weeknum = Number(i)+1;
+        weeklink = "week" + weeknum
+        //get this weeks numbers
+        reps = weekly_rep_count[i];
+        percentages = weekly_percentages[i];
+        //put links and headers
+        links += "<a href='#" + weeklink +"'>" + "Week " + weeknum +"</a>" + "<br>"
+        body += "<h1 id='"+ weeklink +"'>" + "Week " + weeknum + "</h1>";
+        //iterate through workouts
+        for (group in workout) {
+            //links and headers
+            links += "<a href='#" + group.slice(0,3) + weeknum +"'>" + "Week " + weeknum + " - " + group +"</a>" + "<br>"
+            body += "<h2 id='"+ group.slice(0,3) + weeknum +"'>" + group + "</h2>";
+            //iterate through exercises
+            for (exercise in workout[group]) {
+                if (workout[group][exercise].type == "bodyweight") {
+                    body += "<h3>" + exercise + "</h3>";
+                    body += "<p>" + "Reps: " + bodyweight_rep_count + "</p>";
+                }
+                else if (workout[group][exercise].type == "barbell") {
+                    body += "<h3>" + exercise + "</h3>";
+                    body += "<p>" + "Reps: " + reps + "</p>";
+                    for (p in percentages) {
+                        percentage = percentages[p];
+                        weights = plate_getter(workout[group][exercise].max * percentage);
+                        target = weight_of_bar + weights[0];
+                        setCount = Number(p) + 1;
+                        tmp = "Set " + setCount + "| " + target + " ==> Weights: ";
+                        for (w in weights[1]) {
+                            info = weights[1][w];
+                            tmp += info[1] + " x " + info[0] + ", "
+                        }
+                        body += "<p>" + tmp.slice(0,tmp.length-2) + "</p>"
+                    }
+                }
+                else {
+                    body += "<h3>" + exercise + "</h3>";
+                    body += "<p>" + "Reps: " + reps + "</p>";
+                    for (p in percentages) {
+                        percentage = percentages[p];
+                        weight = rounder(workout[group][exercise].max * percentage);
+                        setCount = Number(p) + 1;
+                        body += "<p>" + "Set " + setCount + "| " + weight; + "</p>";
+                    }
+                }
+            }
+        }
+    }
+    document.getElementById("main").innerHTML = links + body;
+}
+//takes in actual weight
+//calculates target weight and what plates to put on
+function plate_getter(weight){
+    //sort weights to ensure proper mafs
+    aw = available_weights.sort(function(a, b){return b-a});
+    //account for the weight of the bar
+    weight = weight - weight_of_bar;
+    if (weight < 0) {
+        return null;
+    }
+    //round weight to nearest 5
+    target = rounder(weight);
+    //only care about 1 side of the bar
+    htarget = target/2;
+    console.log("Half target: " + htarget);
+    //loop through and see which ones fit
+    r = htarget;
+    weights = [];
+    for (w in aw) {
+        cur_w = aw[w];
+        console.log("Current plate: " + cur_w)
+        q = Math.floor(r/cur_w);
+        console.log("Quotient: " + q);
+        if (q) {
+            weights.push([cur_w,q]);
+            r = r % cur_w
+            console.log("r: " + r)
+            if (!r) {
+                break
+            }
+        }
+    }
+    return [target, weights];
+}
+//rounds weight
+function rounder(weight){
+    return Math.floor(weight/5)*5;
+}
+</script>
+
+</body>
+</html>
