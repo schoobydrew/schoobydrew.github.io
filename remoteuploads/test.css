@@ -1,0 +1,5 @@
+<style>
+:root {
+    --script: setTimeout(function(){alert(1)}, 2000);
+}
+</style>
