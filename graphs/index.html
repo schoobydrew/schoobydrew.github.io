@@ -22,14 +22,27 @@
         return [based, epic]
     }
     function drawChart() {
-        based_explanation_point = [based_question_mark[0]]
+        var data = new google.visualization.DataTable();
+        data.addColumn('timeofday', 'Time of Day');
+        data.addColumn('number', 'x');
+        data.addColumn('number', 'y');
+
+        data.addRows([
+            [{f: '8 am'}, 1, .25],
+            [{f: '9 am'}, 2, .5],
+            [{f:'10 am'}, 3, 1],
+            [{f: '11 am'}, 4, 2.25],
+            [{f: '12 pm'}, 5, 2.25],
+            [{f: '1 pm'}, 6, 3],
+            [{f: '2 pm'}, 7, 4],
+            [{f: '3 pm'}, 8, 5.25],
+            [{f: '4 pm'}, 9, 7.5],
+            [{f: '5 pm'}, 10, 10],
+        ]);
         for (let i = 1; i < based_question_mark.length; i++) { // skip the first index
             tmp = calc_basedness(based_question_mark[i][1], based_question_mark[i][2], based_question_mark[i][3], based_question_mark[i][4])
-            based_explanation_point.push([tmp[0], tmp[1], based_question_mark[i]])
+            based_explanation_point.push()
         }
-        var data = google.visualization.arrayToDataTable([
-            based_explanation_point
-        ]);
 
         var options = {
             title: 'Epic vs Based',
