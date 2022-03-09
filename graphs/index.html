@@ -3,7 +3,11 @@
 <script>
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
-
+    data = [
+        ["Name","Cringe", "Degenerate", "Epic", "Based"],
+        ["Andrew", 1, 2, 10, 3],
+        ["Nick", 2, 5, 6, 7]
+    ]
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Age', 'Weight'],
@@ -16,9 +20,9 @@
         ]);
 
         var options = {
-            title: 'Age vs. Weight comparison',
-            hAxis: {title: 'Age', minValue: 0, maxValue: 15},
-            vAxis: {title: 'Weight', minValue: 0, maxValue: 15},
+            title: 'Epic vs Based',
+            hAxis: {title: '<- Cringe :: Based ->', minValue: -1, maxValue: 1},
+            vAxis: {title: '<- Degenerate :: Epic ->', minValue: -1, maxValue: 1},
             legend: 'none'
         };
 
