@@ -3,20 +3,32 @@
 <script>
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
-    data = [
+    based_question_mark = [
         ["Name","Cringe", "Degenerate", "Epic", "Based"],
         ["Andrew", 1, 2, 10, 3],
         ["Nick", 2, 5, 6, 7]
     ]
+    function normalize_scoring(cringe, degenerate, epic, based) {
+        if (cringe > based) {
+            cringe_max = true
+        }
+        if (degenerate > epic) {
+            deg_max = true
+        }
+    }
+    function calc_basedness(cringe, degenerate, epic, based) {
+        based = based - cringe
+        epic = epic - degenerate
+        return [based, epic]
+    }
     function drawChart() {
+        based_explanation_point = [based_question_mark[0]]
+        for (let i = 1; i < based_question_mark.length; i++) { // skip the first index
+            tmp = calc_basedness(based_question_mark[i][1], based_question_mark[i][2], based_question_mark[i][3], based_question_mark[i][4])
+            based_explanation_point.push([based_question_mark[i], tmp[0], tmp[1]])
+        }
         var data = google.visualization.arrayToDataTable([
-            ['Age', 'Weight'],
-            [ 8,      12],
-            [ 4,      5.5],
-            [ 11,     14],
-            [ 4,      5],
-            [ 3,      3.5],
-            [ 6.5,    7]
+            based_explanation_point
         ]);
 
         var options = {
