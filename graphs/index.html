@@ -25,7 +25,7 @@
         based_explanation_point = [based_question_mark[0]]
         for (let i = 1; i < based_question_mark.length; i++) { // skip the first index
             tmp = calc_basedness(based_question_mark[i][1], based_question_mark[i][2], based_question_mark[i][3], based_question_mark[i][4])
-            based_explanation_point.push([based_question_mark[i], tmp[0], tmp[1]])
+            based_explanation_point.push([tmp[0], tmp[1], based_question_mark[i]])
         }
         var data = google.visualization.arrayToDataTable([
             based_explanation_point
